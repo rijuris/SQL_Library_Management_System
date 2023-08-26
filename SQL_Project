@@ -4,6 +4,7 @@ CREATE DATABASE library;
 -- Use the 'library' database
 USE library;
 
+-- Create the 'Books' table
 CREATE TABLE Books (
     ISBN VARCHAR(13) PRIMARY KEY,
     Book_title VARCHAR(30),
@@ -12,6 +13,53 @@ CREATE TABLE Books (
     Status VARCHAR(3),
     Author VARCHAR(30),
     Publisher VARCHAR(30)
+);
+
+-- Create the 'Branch' table
+CREATE TABLE Branch (
+    Branch_no INT PRIMARY KEY,
+    Manager_Id INT,
+    Branch_address VARCHAR(30),
+    Contact_no VARCHAR(15),
+    FOREIGN KEY (Manager_Id) REFERENCES Employee(Emp_Id) ON DELETE CASCADE
+);
+
+-- Create the 'Employee' table
+CREATE TABLE Employee (
+    Emp_Id INT PRIMARY KEY,
+    Emp_name VARCHAR(30),
+    Position VARCHAR(30),
+    Salary DECIMAL(10, 2)
+);
+
+-- Create the 'Customer' table
+CREATE TABLE Customer (
+    Customer_Id INT PRIMARY KEY AUTO_INCREMENT,
+    Customer_name VARCHAR(30),
+    Customer_address VARCHAR(30),
+    Reg_date DATE
+);
+
+-- Create the 'IssueStatus' table
+CREATE TABLE IssueStatus (
+    Issue_Id INT PRIMARY KEY,
+    Issued_cust INT,
+    Issued_book_name VARCHAR(30),
+    Issue_date DATE,
+    Isbn_book VARCHAR(13),
+    FOREIGN KEY (Issued_cust) REFERENCES Customer(Customer_Id) ON DELETE CASCADE,
+    FOREIGN KEY (Isbn_book) REFERENCES Books(ISBN) ON DELETE CASCADE
+);
+
+-- Create the 'ReturnStatus' table
+CREATE TABLE ReturnStatus (
+    Return_Id INT PRIMARY KEY,
+    Return_cust INT,
+    Return_book_name VARCHAR(30),
+    Return_date DATE,
+    Isbn_book2 VARCHAR(13),
+    FOREIGN KEY (Return_cust) REFERENCES Customer(Customer_Id) ON DELETE CASCADE,
+    FOREIGN KEY (Isbn_book2) REFERENCES Books(ISBN) ON DELETE CASCADE
 );
 
 -- Insert 10 books into the 'Books' table
@@ -28,13 +76,6 @@ VALUES
     ('9780345339683', 'Dune', 'Science Fiction', 14.99, 'Yes', 'Frank Herbert', 'Ace Books'),
     ('9780451457998', 'Neuromancer', 'Science Fiction', 9.99, 'Yes', 'William Gibson', 'Ace Books');
 
--- Create the 'Employee' table
-CREATE TABLE Employee (
-    Emp_Id INT PRIMARY KEY,
-    Emp_name VARCHAR(30),
-    Position VARCHAR(30),
-    Salary DECIMAL(10, 2)
-);
 
 -- Insert 8 employees names into the 'Employee' table
 INSERT INTO Employee (Emp_Id, Emp_name, Position, Salary)
@@ -48,15 +89,6 @@ VALUES
     (119, 'Deepak Mishra', 'Manager', 49000.00),
     (120, 'Anjali Singh', 'Manager', 50000.00);
 
--- Create the 'Branch' table
-CREATE TABLE Branch (
-    Branch_no INT PRIMARY KEY,
-    Manager_Id INT,
-    Branch_address VARCHAR(30),
-    Contact_no VARCHAR(15),
-    FOREIGN KEY (Manager_Id) REFERENCES Employee(Emp_Id) ON DELETE CASCADE
-);
-
 -- Insert 5 branches in India into the 'Branch' table
 INSERT INTO Branch (Branch_no, Manager_Id, Branch_address, Contact_no)
 VALUES
@@ -66,13 +98,6 @@ VALUES
     (9, 114, 'Chennai, Tamil Nadu', '044-5678901'),
     (10, 120, 'Kolkata, West Bengal', '033-6789012');
 
--- Create the 'Customer' table
-CREATE TABLE Customer (
-    Customer_Id INT PRIMARY KEY AUTO_INCREMENT,
-    Customer_name VARCHAR(30),
-    Customer_address VARCHAR(30),
-    Reg_date DATE
-);
 
 -- Insert 12 customers into the 'Customer' table
 INSERT INTO Customer (Customer_name, Customer_address, Reg_date)
@@ -90,15 +115,6 @@ VALUES
     ('Ananya Roy', 'Kochi, Kerala', '2022-11-30'),
     ('Sandeep Kumar', 'Indore, Madhya Pradesh', '2022-12-05');
 
- CREATE TABLE IssueStatus (
-    Issue_Id INT PRIMARY KEY,
-    Issued_cust INT,
-    Issued_book_name VARCHAR(30),
-    Issue_date DATE,
-    Isbn_book VARCHAR(13),
-    FOREIGN KEY (Issued_cust) REFERENCES Customer(Customer_Id) ON DELETE CASCADE,
-    FOREIGN KEY (Isbn_book) REFERENCES Books(ISBN) ON DELETE CASCADE
-);
 
 -- Insert 5 records into the 'IssueStatus' table
 INSERT INTO IssueStatus (Issue_Id, Issued_cust, Issued_book_name, Issue_date, Isbn_book)
@@ -109,16 +125,6 @@ VALUES
     (4, 4, 'The Hobbit', '2023-08-04', '9783698521471'),
     (5, 5, 'Romeo and Juliet', '2023-08-05', '9781853260002');
 
--- Create the 'ReturnStatus' table
-CREATE TABLE ReturnStatus (
-    Return_Id INT PRIMARY KEY,
-    Return_cust INT,
-    Return_book_name VARCHAR(30),
-    Return_date DATE,
-    Isbn_book2 VARCHAR(13),
-    FOREIGN KEY (Return_cust) REFERENCES Customer(Customer_Id) ON DELETE CASCADE,
-    FOREIGN KEY (Isbn_book2) REFERENCES Books(ISBN) ON DELETE CASCADE
-);
 
 -- Insert 5 records into the 'ReturnStatus' table
 INSERT INTO ReturnStatus (Return_Id, Return_cust, Return_book_name, Return_date, Isbn_book2)
